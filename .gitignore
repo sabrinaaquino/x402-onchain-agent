@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+next-env.d.ts
+
+# SECRETS — never commit these
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+keystore.json
+secrets/
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+.vercel
+*.tsbuildinfo
+
+# workshop facilitator material (kept out of the standalone agent repo)
+workshop/

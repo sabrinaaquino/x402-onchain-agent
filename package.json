@@ -1,0 +1,35 @@
+{
+  "name": "venice-onchain-analyst",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Workshop demo: a private on-chain wallet analyst. Inference paid via Venice x402, on-chain reads via Venice Crypto RPC, analysis performed by an E2EE model.",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint",
+    "keygen": "node scripts/generate-wallet.mjs",
+    "encrypt-key": "node scripts/encrypt-key.mjs",
+    "topup": "node --env-file=.env scripts/topup.mjs",
+    "smoke": "node --env-file=.env scripts/smoke-test.mjs"
+  },
+  "dependencies": {
+    "@noble/ciphers": "^1.0.0",
+    "@noble/hashes": "^1.5.0",
+    "elliptic": "^6.5.7",
+    "ethers": "^6.13.0",
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "siwe": "^2.3.2",
+    "viem": "^2.21.0",
+    "x402": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.18",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}
