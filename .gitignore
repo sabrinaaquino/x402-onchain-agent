@@ -27,3 +27,8 @@ npm-debug.log*
 
 # workshop facilitator material (kept out of the standalone agent repo)
 workshop/
+
+# extra diagram variants (only the canonical venice-agent-architecture.png ships)
+venice-agent-architecture-simple.png
+venice-agent-architecture-v2.png
+venice-agent-architecture-v3.png

@@ -30,9 +30,24 @@ interface Turn {
 }
 
 const SUGGESTIONS = [
-  "Analyze 0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf on Base",
-  "What is the ETH + USDC balance of vitalik.eth's address 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on Ethereum?",
-  "Read the token metadata for 0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf on Base",
+  {
+    icon: "🔍",
+    title: "Analyze a contract",
+    hint: "Inspect the VVV token on Base",
+    prompt: "Analyze 0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf on Base",
+  },
+  {
+    icon: "💰",
+    title: "Check wallet holdings",
+    hint: "vitalik.eth on Ethereum",
+    prompt: "What tokens are in 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on Ethereum?",
+  },
+  {
+    icon: "🖼️",
+    title: "Visualize a wallet",
+    hint: "Generate an image of its holdings",
+    prompt: "Scan the holdings of 0xacfE6019Ed1A7Dc6f7B508C02d1b04ec88cC21bf on Base, then generate an infographic image of them",
+  },
 ];
 
 const TOOL_LABEL: Record<string, string> = {
@@ -318,6 +333,37 @@ function PageView(p: ViewProps) {
     ? `$${p.health.wallet.balanceUsd?.toFixed?.(2) ?? p.health.wallet.balanceUsd}`
     : null;
 
+  const composer = (
+    <form
+      className="composer"
+      onSubmit={(e) => {
+        e.preventDefault();
+        p.send(p.input);
+      }}
+    >
+      <input
+        type="text"
+        placeholder={p.isPrivate ? "Ask privately (no live reads)…" : "Ask about any wallet, token, or contract…"}
+        value={p.input}
+        onChange={(e) => p.setInput(e.target.value)}
+        disabled={p.busy}
+        spellCheck={false}
+      />
+      <button type="submit" className="send-btn" disabled={p.busy || !p.input.trim()} aria-label="Send">
+        {p.busy ? <span className="spinner" /> : "↑"}
+      </button>
+    </form>
+  );
+
+  const footLine = p.health?.ok ? (
+    <div className="composer-foot">
+      <span>
+        everything via <b>x402</b> (USDC on Base or Solana) ·{" "}
+        {p.isPrivate ? "encrypted, no tools" : "live tools + web"}
+      </span>
+    </div>
+  ) : null;
+
   return (
     <div className="shell">
       {/* ── Sidebar: conversation history ──────────────────────── */}
@@ -410,10 +456,15 @@ function PageView(p: ViewProps) {
             <span className={`mode-tag ${p.isPrivate ? "priv" : "web"}`}>
               {p.isPrivate ? "🔒 Private E2EE · no live tools" : "🌐 Live on-chain tools + web search"}
             </span>
+            <div className="hero-composer">{composer}</div>
             <div className="suggestions">
               {SUGGESTIONS.map((s) => (
-                <button key={s} className="suggestion" onClick={() => p.send(s)} disabled={p.busy}>
-                  {s}
+                <button key={s.title} className="suggestion" onClick={() => p.send(s.prompt)} disabled={p.busy}>
+                  <span className="sg-icon">{s.icon}</span>
+                  <span className="sg-text">
+                    <span className="sg-title">{s.title}</span>
+                    <span className="sg-hint">{s.hint}</span>
+                  </span>
                 </button>
               ))}
             </div>
@@ -451,36 +502,13 @@ function PageView(p: ViewProps) {
         )}
       </main>
 
-      {/* ── Composer ───────────────────────────────────────────── */}
-      <footer className="composer-bar">
-        <form
-          className="composer"
-          onSubmit={(e) => {
-            e.preventDefault();
-            p.send(p.input);
-          }}
-        >
-          <input
-            type="text"
-            placeholder={p.isPrivate ? "Ask privately (no live reads)…" : "Ask about any wallet, token, or contract…"}
-            value={p.input}
-            onChange={(e) => p.setInput(e.target.value)}
-            disabled={p.busy}
-            spellCheck={false}
-          />
-          <button type="submit" className="send-btn" disabled={p.busy || !p.input.trim()} aria-label="Send">
-            {p.busy ? <span className="spinner" /> : "↑"}
-          </button>
-        </form>
-        <div className="composer-foot">
-          {p.health?.ok && (
-            <span>
-              everything via <b>x402</b> (USDC on Base or Solana) ·{" "}
-              {p.isPrivate ? "encrypted, no tools" : "live tools + web"}
-            </span>
-          )}
-        </div>
-      </footer>
+      {/* ── Composer (bottom-docked once a chat has started) ────── */}
+      {!empty && (
+        <footer className="composer-bar">
+          {composer}
+          {footLine}
+        </footer>
+      )}
       </div>
     </div>
   );
