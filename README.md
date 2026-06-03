@@ -7,7 +7,7 @@ Crypto RPC** tools on demand, reasons with a top web model (or a fully private
 on-chain RPC, and image generation — is paid from a single wallet via **x402**.
 No API key anywhere.
 
-![Architecture](./venice-agent-architecture.png)
+![Venice On-Chain Agent — overview](./venice-agent-architecture.png)
 
 ## Highlights
 
@@ -74,14 +74,7 @@ an encrypted, no-tools conversation.
 
 ## How it works
 
-```
-Browser chat ──▶ /api/agent (SSE) ──▶ VeniceClient (x402 wallet auth)
-                                            │  signs Sign-In-With-X per call
-        ┌───────────────────────────────────┼───────────────────────────────┐
-        ▼                                    ▼                               ▼
-  Chat Completions                     Crypto RPC                     Image Generation
-  (web + tools, or E2EE)         (live balances, tokens, logs)      (Grok Imagine HQ)
-```
+![Architecture — layered view](./venice-agent-architecture-technical.png)
 
 The model is given on-chain **tools** and calls them across multiple rounds; the
 server runs each tool, streams the result back, and loops until the model answers.
